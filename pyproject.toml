@@ -1,0 +1,22 @@
+[project]
+name = "vectorutils"
+version = "0.0.1"
+authors = [
+  { name="Michael Pu", email="michael.pu123@gmail.com" },
+]
+description = "Collection of utility functions for working with vectors in Python"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/mchlp/vectorutils"
+"Bug Tracker" = "https://github.com/mchlp/vectorutils/issues"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
