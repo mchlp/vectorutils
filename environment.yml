@@ -1,9 +1,8 @@
 name: vectorutils-env
 channels:
-  - anaconda
+  - defaults
   - pytorch
 dependencies:
-  - python==3.8 
+  - python==3.9 
   - faiss-cpu
-  - numpy==1.22.3
   - pyarrow==11.0.0
