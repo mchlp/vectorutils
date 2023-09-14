@@ -1,0 +1,8 @@
+name: vectorutils-env
+channels:
+  - pytorch
+dependencies:
+  - faiss-cpu
+  - pip
+  - pip:
+    - -r file:requirements.txt
