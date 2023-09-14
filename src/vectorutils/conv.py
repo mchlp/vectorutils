@@ -1,40 +1,28 @@
+"""Collection of classes for converting between vector formats"""
+
 import numpy as np
 import pyarrow as pa
+import faiss
+from pyserini.index import lucene
 
 
-class FaissToArrowConverter:
-    def __init__(self):
-        self.indexes = []
+class FaissConverter:
+    """Class for converting from faiss vector format"""
+    def __init__(self, index: faiss.Index):
+        self.index = index
 
-    def add_index(self, index):
-        self.indexes.append(index)
-
-    def _convert_index_to_arrow(self, index):
-        num_vectors = index.ntotal
-        vector_dimension = index.d
+    def to_arrow(self):
+        """Returns an arrow table containing the vectors"""                 
+        vectors_np = self.to_numpy()
+        vectors_np_flat = vectors_np.reshape(-1)
+        vectors_arrow = pa.FixedSizeListArray.from_arrays(vectors_np_flat, self.index.d)
+        return vectors_arrow
+    
+    def to_numpy(self):
+        """Returns a numpy array containing the vectors"""
+        num_vectors = self.index.ntotal
+        vector_dimension = self.index.d
         vectors_np = np.empty((num_vectors, vector_dimension), dtype=np.float32)
-
-        # Iterate through the index and copy the vectors to the numpy array
-        for i in range(num_vectors):
-            index.reconstruct(i, vectors_np[i])
-
-        # Reshape the numpy array to make each vector one-dimensional
-        vectors_flat = vectors_np.reshape(-1)
-
-        # Convert the flat numpy array to a PyArrow array
-        vectors_arrow = pa.array(vectors_flat)
-
-        # Create a PyArrow schema with a single field for the vectors
-        vector_field = pa.field("vectors", pa.float32(), nullable=False)
-        schema = pa.schema([vector_field])
-
-        # Create a PyArrow table with the vectors array
-        table = pa.Table.from_arrays([vectors_arrow], schema=schema)
-        return table
-
-    def convert_all_to_arrow(self):
-        arrow_tables = []
-        for index in self.indexes:
-            arrow_table = self._convert_index_to_arrow(index)
-            arrow_tables.append(arrow_table)
-        return arrow_tables
+        
+        self.index.reconstruct_n(0, num_vectors, vectors_np)
+        return vectors_np

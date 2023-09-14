@@ -2,7 +2,7 @@
 name = "vectorutils"
 version = "0.0.1"
 authors = [
-  { name="Michael Pu", email="michael.pu123@gmail.com" },
+  { name="Michael Pu", email="michael.pu123@gmail.com" }  
 ]
 description = "Collection of utility functions for working with vectors in Python"
 readme = "README.md"
