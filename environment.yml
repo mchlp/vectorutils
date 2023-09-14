@@ -1,5 +1,6 @@
 name: vectorutils-env
 channels:
+  - anaconda
   - pytorch
 dependencies:
   - python==3.8 
