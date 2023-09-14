@@ -1,0 +1,8 @@
+name: vectorutils-env
+channels:
+  - defaults
+  - pytorch
+dependencies:
+  - python==3.9 
+  - faiss-cpu
+  - pyarrow==11.0.0

@@ -13,6 +13,9 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
 [project.urls]
 "Homepage" = "https://github.com/mchlp/vectorutils"
 "Bug Tracker" = "https://github.com/mchlp/vectorutils/issues"

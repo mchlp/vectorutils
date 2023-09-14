@@ -3,7 +3,6 @@
 import numpy as np
 import pyarrow as pa
 import faiss
-from pyserini.index import lucene
 
 
 class FaissConverter:
