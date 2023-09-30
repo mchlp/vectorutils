@@ -1,6 +1,7 @@
 import time
 import faiss
 import sys
+import math
 
 from pympler import asizeof
 from vectorutils import conv
@@ -24,12 +25,17 @@ arrow_vector = converter.to_arrow()
 end = time.time()
 print(f"Conversion took {end-start}s")
 print(f"Size of vector: {asizeof.asizeof(arrow_vector)}")
+print(f"Length of vector: {len(arrow_vector)}")
 
-arrow_vector_sub = pa.RecordBatch.from_arrays([arrow_vector.slice(length=500000)], names=["data"])
+batch_size = 2000000
 
-with pa.OSFile('msmacro_vectors.arrow', 'wb') as sink:
-    with pa.ipc.new_file(sink, schema=arrow_vector_sub.schema) as writer:
-        writer.write(arrow_vector_sub)
+num_batches = math.ceil(len(arrow_vector) / batch_size)
+
+for i in range(0, num_batches):
+    arrow_vector_sub = pa.RecordBatch.from_arrays([arrow_vector.slice(offset=batch_size*i, length=batch_size)], names=["data"])
+    with pa.OSFile(f'msmacro_vectors_{i}.arrow', 'wb') as sink:
+        with pa.ipc.new_file(sink, schema=arrow_vector_sub.schema) as writer:
+            writer.write(arrow_vector_sub)
 
 print()
 print("Convert to numpy")
